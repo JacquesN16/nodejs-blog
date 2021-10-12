@@ -5,10 +5,20 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
+const route = require('./routes'); // index.js will be loaded 
+
 app.use(express.static(path.join(__dirname,'public')));
 
+//Middleware
+  //form
+app.use(express.urlencoded({
+  extended: true
+}));
+  //XML, fetch, axios
+app.use(express.json());
+
 // HTTP logger
-app.use(morgan('combined'));
+//app.use(morgan('combined'));
 
 //Template engine
 app.engine('hbs', handlebars({
@@ -17,22 +27,10 @@ app.engine('hbs', handlebars({
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname,'resources\\views'));
 
+//Home,search, contact
 
-app.get('/', (req, res) => {
-  res.render('home');
-});
-app.get('/news', (req, res) => {
-  res.render('news');
-});
-
-// option 1
-//  app.get('/', function(req, res){
-//   return res.send('Hello World!');
-// })
-
-// option 2
-// app.get('/', (req, res) => res.send('Hello World!'))
-
+//ROUTING ../routes/index.js
+route(app);
 
 // 127.0.0.1 - localhost
 app.listen(port, () => {
